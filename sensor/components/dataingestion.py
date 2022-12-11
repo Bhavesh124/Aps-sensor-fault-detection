@@ -1,6 +1,6 @@
 from sensor import utils
-from sensor.entity import config_entity
-from sensor.entity import artifact_entity
+from sensor.entity.config_entity import DataIngestionConfig
+from sensor.entity.artifact_entity import DataIngestionArtifact
 from sensor.exception import SensorException
 from sensor.logger import logging
 import pandas as pd
@@ -10,14 +10,14 @@ from sklearn.model_selection import train_test_split
 
 class DataIngestion:
 
-    def __init__(self,data_ingestion_config:config_entity.DataIngestionConfig):
+    def __init__(self,data_ingestion_config:DataIngestionConfig):
         try:
             logging.info(f"{'>>'*20} Data Ingestion {'<<'*20}")
             self.data_ingestion_config=data_ingestion_config
         except Exception as e:
             raise SensorException(e, sys)
 
-    def initiate_data_ingestion(self)->artifact_entity.DataIngestionArtifact:
+    def initiate_data_ingestion(self)->DataIngestionArtifact:
         try:
             logging.info("Exporting Collection data as pandas dataframe")
             #Exporting collection data as pandas dataframe
@@ -53,7 +53,7 @@ class DataIngestion:
             test_df.to_csv(path_or_buf=self.data_ingestion_config.test_file_path,index=False,header=True)
 
             #prepare artifact
-            data_ingestion_artifact=artifact_entity.DataIngestionArtifact(
+            data_ingestion_artifact=DataIngestionArtifact(
                 feature_store_file_path = self.data_ingestion_config.feature_store_file_path,
                 train_file_path = self.data_ingestion_config.train_file_path,
                 test_file_path = self.data_ingestion_config.test_file_path)

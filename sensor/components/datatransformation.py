@@ -8,9 +8,9 @@ from sensor import utils
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler
 from imblearn.combine import SMOTETomek
-from skelarn.impute import SimpleImputer
+from sklearn.impute import SimpleImputer
 from typing import Optional
-from sklearn.preprocessing import LabelEncoder0
+from sklearn.preprocessing import LabelEncoder
 from sensor.config import TARGET_COLUMN
 
 
@@ -33,12 +33,13 @@ class DataTransformation:
                                                                                   #The method returns a Pipeline object that contains two transformers: a SimpleImputer and a RobustScaler. The SimpleImputer replaces missing values in the data with the value 0, 
                                                                                   # while the RobustScaler scales the data to remove the median and scale the data according to the quantile range. 
                                                                                   # This Pipeline object can be used to transform data by applying these two transformations in sequence.            
-            simple_imputer = SimpleImputer(strategy=constant,fill_value=0)
+            simple_imputer = SimpleImputer(strategy='constant',fill_value=0)
             robust_scaler = RobustScaler()
-            pipeline = Pipeline(steps[
-                ('Imputer',simple_imputer)
+            pipeline = Pipeline(steps=[
+                ('Imputer',simple_imputer),
                 ('RobustScaler',robust_scaler)
             ])
+            return Pipeline
 
         except Exception as e:
             raise  SensorException(e,sys)
@@ -46,12 +47,13 @@ class DataTransformation:
     def initiate_data_transformation(self,)-> artifact_entity.DataTransformationArtifact:
         try:
             #reading train & testing file
-            train_df = pd.read_csv(self.data_ingestion_artifact,train_file_path)
-            test_df = pd.read_csv(self.data_ingestion_artifact,test_file_path)
+            train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
+            test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
 
             #selecting train & test feature for input dataset
             input_feature_train_df = train_df.drop(TARGET_COLUMN,axis=1)
             input_feature_test_df = test_df.drop(TARGET_COLUMN,axis=1)
+            print(input_feature_train_df)
 
             #selecting target feature for train & test dataframe
             target_feature_train_df = train_df[TARGET_COLUMN]

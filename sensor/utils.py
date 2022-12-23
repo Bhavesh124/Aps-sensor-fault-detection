@@ -62,7 +62,7 @@ def save_object(file_path:str, obj: object) -> None:
     except Exception as e:
         raise SensorException(e, sys) from e
 
-    def load_object(file_path: str) -> object:
+def load_object(file_path: str) -> object:
         try:
             if not os.path.exists(file_path):
                 raise Exception(f"The file: {file_path} is not exists")
@@ -71,7 +71,7 @@ def save_object(file_path:str, obj: object) -> None:
         except Exception as e:
             raise SensorException(e, sys) from e
 
-    def save_numpy_array_data(file_path: str, array: np.array):
+def save_numpy_array_data(file_path: str, array: np.array):
         """
         Save numpy array data to file
         file_path: str location of file to save
@@ -86,7 +86,7 @@ def save_object(file_path:str, obj: object) -> None:
         except Exception as e:
             raise SensorException(e,sys) from e
 
-    def load_numpy_array_data(file_path: str)-> np.array:
+def load_numpy_array_data(file_path: str)-> np.array:
         """
         load numpy array data from file
         file_path: str location of file to load

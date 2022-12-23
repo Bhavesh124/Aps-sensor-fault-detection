@@ -4,7 +4,7 @@ from sensor.logger import logging
 import os,sys
 import pandas as pd
 import numpy as np
-from sensor import utils
+from sensor import utils 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler
 from imblearn.combine import SMOTETomek
@@ -39,7 +39,7 @@ class DataTransformation:
                 ('Imputer',simple_imputer),
                 ('RobustScaler',robust_scaler)
             ])
-            return Pipeline
+            return pipeline
 
         except Exception as e:
             raise  SensorException(e,sys)
@@ -47,17 +47,17 @@ class DataTransformation:
     def initiate_data_transformation(self,)-> artifact_entity.DataTransformationArtifact:
         try:
             #reading train & testing file
-            train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
-            test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
+            self.train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
+            self.test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
 
             #selecting train & test feature for input dataset
-            input_feature_train_df = train_df.drop(TARGET_COLUMN,axis=1)
-            input_feature_test_df = test_df.drop(TARGET_COLUMN,axis=1)
+            input_feature_train_df = self.train_df.drop(TARGET_COLUMN,axis=1)
+            input_feature_test_df = self.test_df.drop(TARGET_COLUMN,axis=1)
             print(input_feature_train_df)
 
             #selecting target feature for train & test dataframe
-            target_feature_train_df = train_df[TARGET_COLUMN]
-            target_feature_test_df = test_df[TARGET_COLUMN]
+            target_feature_train_df = self.train_df[TARGET_COLUMN]
+            target_feature_test_df = self.test_df[TARGET_COLUMN]
 
             label_encoder = LabelEncoder()
             label_encoder.fit(target_feature_train_df)
@@ -68,6 +68,7 @@ class DataTransformation:
 
             transformation_pipeline = DataTransformation.get_data_transformer_object()
             transformation_pipeline.fit(input_feature_train_df)
+            print("bhavesh")
 
             #transformation of input feature
             input_feature_train_arr = transformation_pipeline.transform(input_feature_train_df)
@@ -75,13 +76,13 @@ class DataTransformation:
 
             #Afterr transforming the data we do not det data in DataFrame, we get in array
             #to balance our dataset i.e is in array
-            smt = SMOTETomek
+            smt = SMOTETomek()
             logging.info(f"Before resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_arr}")
             input_feature_train_arr,target_feature_train_arr = smt.fit_resample(input_feature_train_arr,target_feature_train_arr)
             logging.info(f"After resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_arr}")
             
             logging.info(f"Before resampling in training set Input: {input_feature_test_arr} Target:{target_feature_test_arr}")
-            input_feature_test_arr,target_feature_test_arr = smt.fit(input_feature_test_arr,target_feature_test_arr)
+            input_feature_test_arr,target_feature_test_arr = smt.fit_resample(input_feature_test_arr,target_feature_test_arr)
             logging.info(f"After resampling in training set Input: {input_feature_test_arr} Target:{target_feature_test_arr}")
 
             #target encoder

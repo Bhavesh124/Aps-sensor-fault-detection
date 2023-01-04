@@ -7,7 +7,8 @@ from sensor.components.dataingestion import DataIngestion
 from sensor.components.datavalidation import DataValidation
 from sensor.components.datatransformation import DataTransformation
 from sensor.components.modeltrainer import ModelTrainer
-#from sensor.components import *
+from sensor.components.modelevaluation import ModelEvaluation
+from sensor.components.modelpusher import ModelPusher 
 
 '''def test_logger_and_exception():
     try:
@@ -45,6 +46,20 @@ if __name__=="__main__":
         model_trainer = ModelTrainer(model_trainer_config=model_trainer_config,
                                      data_transformation_artifact=data_transformation_artifact)
         model_trainer_artifact = model_trainer.initiate_model_trainer()
+
+        #model evaluation
+        model_eval_config = config_entity.ModelEvaluationConfig(training_pipeline_config = training_pipeline_config)
+        model_eval = ModelEvaluation(model_eval_config = model_eval_config,
+                                    data_ingestion_artifact=data_ingestion_artifact,
+                                    data_transformation_artifact=data_transformation_artifact,
+                                    model_trainer_artifact=model_trainer_artifact)
+        model_evaluation_artifact = model_eval.initiate_model_evaluation()
         
+        #model pusher
+        model_pusher_config = config_entity.ModelPusherConfig(training_pipeline_config = training_pipeline_config)
+        model_pusher = ModelPusher(model_pusher_config = model_pusher_config,
+                                   data_transformation_artifact = data_transformation_artifact,
+                                   model_trainer_artifact = model_trainer_artifact)
+        model_pusher_artifact = model_pusher.initiate_model_pusher()
     except Exception as e:
         print(e)

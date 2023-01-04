@@ -61,7 +61,7 @@ class ModelTrainer:
             yhat_test = model.predict(x_test)
             f1_test_score  =f1_score(y_true=y_test, y_pred=yhat_test)
             
-            logging.info(f"train score:{f1_train_score} and tests score {f1_test_score}")
+            logging.info(f"train score:{f1_train_score} and tests score:{f1_test_score}")
             #check for overfitting or underfiiting or expected score
             logging.info(f"Checking if our model is underfitting or not")
             if f1_test_score<self.model_trainer_config.expected_score:

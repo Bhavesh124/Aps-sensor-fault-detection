@@ -1,9 +1,13 @@
 import pymongo
 import pandas as pd
 import json
-client = pymongo.MongoClient("mongodb://localhost:27017/neurolabDB")
+import os
+from sensor.config import mongo_client
 
-DATA_FILE_PATH = "/config/workspace/aps_failure_training_set1.csv"
+# mongodb_url = os.getenv('MONGO_DB_URL')
+# client = pymongo.MongoClient(mongodb_url)
+
+DATA_FILE_PATH = (r"C:\Users\Ranjit Singh\Desktop\Aps-sensor-fault-detection\aps_failure_training_set1.csv")
 DATABASE_NAME = "aps"
 COLLECTION_NAME = "sensor"
 
@@ -15,5 +19,5 @@ if __name__=="__main__":
 
     json_record = list(json.loads(df.T.to_json()).values())
     print(json_record[0])
-
-    client[DATABASE_NAME][COLLECTION_NAME].insert_many(json_record)
+    mongo_client[DATABASE_NAME][COLLECTION_NAME].insert_many(json_record)
+    print("inserted documented :- ",mongo_client[DATABASE_NAME][COLLECTION_NAME].count_documents())

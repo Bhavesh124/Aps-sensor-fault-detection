@@ -8,7 +8,8 @@ from sensor.components.datavalidation import DataValidation
 from sensor.components.datatransformation import DataTransformation
 from sensor.components.modeltrainer import ModelTrainer
 from sensor.components.modelevaluation import ModelEvaluation
-from sensor.components.modelpusher import ModelPusher 
+from sensor.components.modelpusher import ModelPusher
+from sensor.predictor import ModelResolver 
 
 '''def test_logger_and_exception():
     try:
@@ -16,7 +17,10 @@ from sensor.components.modelpusher import ModelPusher
         print(result)
     except Exception as e:
         raise SensorException(e,sys)'''
-
+# if __name__ == "__main__":
+#     obj = ModelResolver()
+#     path = obj.get_latest_dir_path()
+#     print(path)
 
 if __name__=="__main__":
     try:

@@ -20,4 +20,4 @@ if __name__=="__main__":
     json_record = list(json.loads(df.T.to_json()).values())
     print(json_record[0])
     mongo_client[DATABASE_NAME][COLLECTION_NAME].insert_many(json_record)
-    print("inserted documented :- ",mongo_client[DATABASE_NAME][COLLECTION_NAME].count_documents())
+    # print("inserted documented :- ",mongo_client[DATABASE_NAME][COLLECTION_NAME].count_documents())

@@ -23,8 +23,9 @@ class ModelResolver:
             if len(dir_names)==0:
                 return None
             dir_names = list(map(int,dir_names))
-            latest_dir_name = max(dir_names)
-            return os.path.join(latest_dir,self.model_registry,f"{latest_dir_name}")
+            latest_dir_name = str(max(dir_names))
+
+            return os.path.join(self.model_registry,f"{latest_dir_name}")
         
         except Exception as e:
             raise e
@@ -94,3 +95,5 @@ class ModelResolver:
 
         except Exception as e:
             raise e
+        
+
